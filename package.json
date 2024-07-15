@@ -1,0 +1,32 @@
+{
+  "name": "divitv",
+  "version": "1.0.0",
+  "dependencies": {
+    "expo": "~51.0.13",
+    "expo-splash-screen": "~0.27.5",
+    "expo-status-bar": "~1.12.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "npm:react-native-tvos@~0.74.2-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@react-native-tvos/config-tv": "^0.0.10",
+    "@types/react": "~18.2.45",
+    "typescript": "~5.3.3"
+  },
+  "expo": {
+    "install": {
+      "exclude": [
+        "react-native"
+      ]
+    }
+  },
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  }
+}

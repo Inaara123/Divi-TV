@@ -1,9 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { View, FlatList, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { database } from './firebaseConfig';
+import { ref, onValue } from 'firebase/database';
+import PatientList from './PatientList';
+import TableTitle from './TableTitle';
+import Banner from './Banner';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+
+
+      <Banner />
+      <TableTitle />
+
+      <PatientList />
+     
     </View>
   );
 }
@@ -11,8 +22,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    
   },
 });

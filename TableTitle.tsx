@@ -9,7 +9,7 @@ const TableTitle = () => {
         <Text style={styles.titleSnotext}>SNO</Text>
         <Text style={styles.titletext}>Patient Name</Text>
         <Text style={styles.titletext}>Department</Text>
-        <Text style={styles.titletext}>Area</Text>
+        <Text style={styles.titletext}>Status</Text>
         <Text style={styles.titlelasttext}>Consulting Doctor</Text>
       
     </View>

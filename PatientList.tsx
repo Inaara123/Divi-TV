@@ -8,41 +8,34 @@ const PatientList = () => {
     const [allPatients, setAllPatients] = useState([]);
     const [displayedPatients, setDisplayedPatients] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
+    const [tejaCurrent, setTejaCurrent] = useState(0);
+    const [arjunCurrent, setArjunCurrent] = useState(0);
+    const [pretCurrent, setPretCurrent] = useState(0);
+
+
 
     useEffect(() => {
-        const dbRef = ref(database, 'reception/patient');
-        const fetchPatients = () => {
-            // This onValue is the reason why i am continuousy listening to changes in Database //
-            onValue(dbRef, (snapshot) => {
+        const patientDbRef = ref(database, 'reception/patient');
+        const rootDbRef = ref(database, '/');
+    
+        const fetchData = () => {
+            // Listener for patient data
+            onValue(patientDbRef, (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     const list = [];
-                    // Object.keys(data).forEach(key => {
-                    //     Object.keys(data[key]).forEach(innerKey => {
-                    //         // Check if the patient is marked as deleted
-                    //         if (!data[key][innerKey].deleted) {
-                    //             list.push({
-                    //                 id: innerKey,
-                    //                 ...data[key][innerKey]
-                    //             });
-                    //         }
-                    //     });
-                    // });
+                    
                     Object.keys(data).forEach(innerKey => {
-                        
-                            // Check if the patient is marked as deleted
-                            if (!data[innerKey].deleted) {
-                                list.push({
-                                    id: innerKey,
-                                    ...data[innerKey]
-                                });
-                            }
-                        });
-                        console.log(list)
-                    ;
+                        if (!data[innerKey].deleted) {
+                            list.push({
+                                id: innerKey,
+                                ...data[innerKey]
+                            });
+                        }
+                    });
+                    
+                    console.log("Patient list:", list);
     
-    
-                    // Assuming you want to prevent duplicates, ensure list is unique
                     const uniqueList = list.reduce((acc, current) => {
                         const x = acc.find(item => item.id === current.id);
                         if (!x) {
@@ -60,15 +53,33 @@ const PatientList = () => {
                 }
                 setLoading(false);
             });
+    
+            // Listener for root data (tejacurrentcount)
+            onValue(rootDbRef, (snapshot) => {
+                const rootData = snapshot.val();
+                if (rootData && ( rootData.tejacurrentcount) !== undefined) {
+                    setTejaCurrent(rootData.tejacurrentcount);}
+                    console.log("Theja Current count:", rootData.tejacurrentcount);
+                if (rootData && ( rootData.arjuncurrentcount) !== undefined) {
+                    // setTejaCurrent(rootData.arjuncurrentcount);
+                    console.log(" Arjun Current count:", rootData.arjuncurrentcount);
+                    setArjunCurrent(rootData.arjuncurrentcount);
+                    // Do something with the tejacurrentcount here, e.g.,
+                    // setCurrentCount(rootData.tejacurrentcount);
+                }
+            });
         };
     
-        fetchPatients();
+        fetchData();
     
-        // Cleanup function to detach the listener
+        // Cleanup function to detach both listeners
         return () => {
-            off(dbRef);
+            off(patientDbRef);
+            off(rootDbRef);
         };
     }, []);
+
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -109,10 +120,30 @@ const PatientList = () => {
                 <Text style={styles.textfont}> {item['Patient Name']}</Text>
             </View>
             <View style={{width: 200}}>
-                 <Text style={styles.textfont}>Gynacology</Text>
+                 <Text style={styles.textfont}>{item['Dept value']}</Text>
             </View>
             <View style={{width: 200}}>
-                <Text style={styles.textfont}>{item.Area}</Text>
+            <Text style={styles.textfont}>
+  {(() => {
+    let currentcountix = item['Dept value'] === 'Gynecology' ? tejaCurrent : 
+    item['Dept value'] === 'Dermatology' ? arjunCurrent : 
+    undefined; // Default case if needed
+  
+    const difference = item['Waiting Number'] - currentcountix;
+    console.log("difference : ",difference)
+    console.log("theja current : ",tejaCurrent)
+    console.log("item['Waiting Number'] : ",item['Waiting Number'])
+    if (difference === 0) {
+      return 'In Consultation';
+    } else if (difference === 1) {
+      return 'Next';
+    } else if (difference > 1) {
+      return difference.toString();
+    } else {
+      return 'N/A';  // For negative differences or other unexpected cases
+    }
+  })()}
+</Text>
             </View>
             <View style={{width: 200}}>
                 <Text style={styles.textfont}>{item['Consulting Doctor']}</Text>

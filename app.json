@@ -18,6 +18,14 @@
       ]
     ],
     "name": "DiviTv",
-    "slug": "DiviTv"
+    "slug": "DiviTv",
+    "extra": {
+      "eas": {
+        "projectId": "9b1e262d-7a37-45b6-9b0e-d67bb1bb92a5"
+      }
+    },
+    "android": {
+      "package": "com.sabeelnahmed.DiviTv"
+    }
   }
 }
